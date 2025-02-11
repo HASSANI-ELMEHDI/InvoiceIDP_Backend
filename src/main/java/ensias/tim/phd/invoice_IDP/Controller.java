@@ -24,11 +24,12 @@ public class Controller {
     }
 
     @PostMapping("/extract-data")
-    public InvoiceModel extractInvoiceData(@RequestParam("file") MultipartFile file) {
+    public String extractInvoiceData(@RequestParam("file") MultipartFile file) {
         // Step 1: Perform OCR to extract text from the image
         String ocrText = ocrService.extractText(file);
 
-        String prompt = "somthing"+ocrText;  // todo
+        String prompt = "Extract structured JSON data from the following invoice text :"
+                +ocrText +"\n Return only valid JSON without additional text.";
 
         // Step 2: Call LLM service to structure the data from OCR text
         String structuredData = llmService.extractStructuredData(prompt);
@@ -36,6 +37,6 @@ public class Controller {
         // Step 3: Validate the structured data
         InvoiceModel invoiceModel = validationService.validateData(structuredData);
 
-        return invoiceModel;
+        return structuredData;
     }
 }
