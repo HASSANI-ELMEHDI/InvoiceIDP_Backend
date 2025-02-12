@@ -28,11 +28,8 @@ public class Controller {
         // Step 1: Perform OCR to extract text from the image
         String ocrText = ocrService.extractText(file);
 
-        String prompt = "Extract structured JSON data from the following invoice text :"
-                +ocrText +"\n Return only valid JSON without additional text.";
-
         // Step 2: Call LLM service to structure the data from OCR text
-        String structuredData = llmService.extractStructuredData(prompt);
+        String structuredData = llmService.extractStructuredData(ocrText);
 
         // Step 3: Validate the structured data
         InvoiceModel invoiceModel = validationService.validateData(structuredData);

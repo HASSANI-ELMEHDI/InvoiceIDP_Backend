@@ -10,7 +10,11 @@ public class LlmService {
     LlmService(ChatClient.Builder builder) {
         this.chatClient = builder.build();
     }
-    public String extractStructuredData(String prompt) {
+    public String extractStructuredData(String ocrText) {
+        String prompt = "Extract structured JSON data from the following invoice text:\n"
+                + ocrText
+                + "\nReturn only a valid JSON object without any additional text or explanations.";
+
         return chatClient.prompt()
                 .system("You are an AI assistant trained to extract structured data from invoices.")
                 .user(prompt)
